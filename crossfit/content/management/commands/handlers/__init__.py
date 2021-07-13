@@ -1,3 +1,3 @@
-from . import product_caruosel
+from . import caruosel
 from . import menu
 from . import echo
