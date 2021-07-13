@@ -6,5 +6,5 @@ def get():
     markup.add(InlineKeyboardButton(
         'Питание', callback_data='categories_list_product'))
     markup.add(InlineKeyboardButton(
-        'Упражения', callback_data='categories_list_exersice'))
+        'Упражения', callback_data='categories_list_exercise'))
     return markup
