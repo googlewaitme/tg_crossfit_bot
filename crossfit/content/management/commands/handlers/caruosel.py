@@ -1,6 +1,6 @@
 from ..loader import dp
 from aiogram import types
-from ..keyboards.inline import generic
+from ..keyboards.inline import generic, menu_markup
 from ..utils.filters import starts_with
 from ..utils.helpers import get_chapter_model, get_publication_model
 from content.models import Product
@@ -21,7 +21,7 @@ async def set_readed(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(starts_with('categories_list'))
 async def send_chapter_list(callback_query: types.CallbackQuery):
     name_of_chapter = callback_query.data.split('_')[2]
-    query = get_chapter_model(name_of_chapter).objects.all()
+    query = get_chapter_model(name_of_chapter).objects.filter(is_view=True)
     list_button_names = [
         (el.name, f'element_{name_of_chapter}_{el.pk}_{0}') for el in query
     ]
@@ -38,10 +38,15 @@ async def send_carousel_element_product(callback_query: types.CallbackQuery):
     data = callback_query.data.split('_')
     publication = get_publication_model(data[1])
     category_id, element_id = data[2], int(data[3])
-    markup = make_keyboard(data)
     query = publication.objects.filter(category=category_id)
-    product = list(query)[element_id]
-    text = make_post(product)
+    if len(list(query)) > 0:
+        product = list(query)[element_id]
+        text = make_post(product)
+        markup = make_keyboard(data)
+    else:
+        text = 'Пока что не одной публикации'  # TODO
+        markup = generic.inline_button(
+            'Назад', f'categories_list_{data[1]}')
     await callback_query.message.edit_text(
         text=text, reply_markup=markup)
 

@@ -4,9 +4,11 @@ from django.db import models
 class AbstractCategory(models.Model):
     name = models.CharField(max_length=200, verbose_name='Имя категории')
     description = models.TextField(verbose_name='Описание')
+    is_view = models.BooleanField(default=False, verbose_name='Отображение')
 
     def __str__(self):
-        return self.name + ' | ' + self.description[:100]
+        state = '🟢' if self.is_view else '⚪'
+        return state + ' ' + self.name + ' | ' + self.description[:100]
 
     class Meta:
         abstract = True
