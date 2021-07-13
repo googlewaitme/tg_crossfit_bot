@@ -60,10 +60,10 @@ class Exercise(Publication):
 
 class ButtonOneText(models.Model):
     name = models.CharField(
-        max_length=200, unique=True,
-        editable=False, verbose_name='Уникальное название')
-    text = models.TextField(verbose_name='Отправляемый текст')
-    description = models.TextField('Описание')
+        max_length=200, unique=True, verbose_name='Уникальное название')
+    text = models.TextField(
+        verbose_name='Отправляемый текст')
+    description = models.TextField(verbose_name='Описание')
 
     def __str__(self):
         return self.name
