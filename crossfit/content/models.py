@@ -5,6 +5,8 @@ class AbstractCategory(models.Model):
     name = models.CharField(max_length=200, verbose_name='Имя категории')
     description = models.TextField(verbose_name='Описание')
     is_view = models.BooleanField(default=False, verbose_name='Отображение')
+    create_date = models.DateTimeField(
+        auto_now_add=True, verbose_name='Дата создания')
 
     def __str__(self):
         state = '🟢' if self.is_view else '⚪'
@@ -16,8 +18,8 @@ class AbstractCategory(models.Model):
 
 class ProductCategory(AbstractCategory):
     class Meta:
-        verbose_name = 'Категория питания'
-        verbose_name_plural = 'Категории питаний'
+        verbose_name = 'Категория рецептов'
+        verbose_name_plural = 'Категории рецептов'
 
 
 class ExerciseCategory(AbstractCategory):
@@ -29,7 +31,7 @@ class ExerciseCategory(AbstractCategory):
 class Publication(models.Model):
     text = models.TextField(verbose_name='Текст публикации')
     create_date = models.DateTimeField(
-        auto_now=True, verbose_name='Дата создания')
+        auto_now_add=True, verbose_name='Дата создания')
     name = models.CharField(
         max_length=200, verbose_name='Заголовок')
 
@@ -46,8 +48,8 @@ class Product(Publication):
         verbose_name='Категория', related_name='products')
 
     class Meta:
-        verbose_name = 'Питание'
-        verbose_name_plural = 'Питания'
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'рецепты'
 
 
 class Exercise(Publication):
