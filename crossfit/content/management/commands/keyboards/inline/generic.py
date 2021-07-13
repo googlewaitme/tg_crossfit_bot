@@ -23,13 +23,23 @@ def inline_carousel(object_id, count_objects,
             назад
     """
     markup = InlineKeyboardMarkup()
-    callback_prev = f'{callback_prefix}_{max(0, object_id - 1)}'
-    button_prev = InlineKeyboardButton('<-', callback_data=callback_prev)
+    if object_id > 0:
+        callback_prev = f'{callback_prefix}_{object_id - 1}'
+        button_prev = InlineKeyboardButton('<-', callback_data=callback_prev)
+        markup.insert(button_prev)
     button_page = InlineKeyboardButton(str(object_id + 1), callback_data='EMPTY_CALLBACK')
-    callback_next = f'{callback_prefix}_{min(count_objects - 1, object_id + 1)}'
-    button_next = InlineKeyboardButton('->', callback_data=callback_next)
-    markup.row(button_prev, button_page, button_next)
-
+    markup.insert(button_page)
+    if object_id + 1 < count_objects:
+        callback_next = f'{callback_prefix}_{object_id + 1}'
+        button_next = InlineKeyboardButton('->', callback_data=callback_next)
+        markup.insert(button_next)
     back_button = InlineKeyboardButton('Назад', callback_data=callback_back_button)
     markup.add(back_button)
+    return markup
+
+
+def inline_button(text, callback_data):
+    markup = InlineKeyboardMarkup()
+    button = InlineKeyboardButton(text, callback_data=callback_data)
+    markup.add(button)
     return markup
