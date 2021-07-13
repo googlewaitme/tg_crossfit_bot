@@ -1,10 +1,10 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def get():
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton(
-        'Питание', callback_data='product'))
+        'Питание', callback_data='categories_list_product'))
     markup.add(InlineKeyboardButton(
-        'Упражения', callback_data='exersice'))
+        'Упражения', callback_data='categories_list_exersice'))
     return markup
