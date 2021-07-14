@@ -73,5 +73,5 @@ class ButtonOneText(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Кнопка одного текста'
-        verbose_name_plural = 'Кнопки одного текста'
+        verbose_name = 'Шаблон сообщения'
+        verbose_name_plural = 'Шаблоны сообщений'

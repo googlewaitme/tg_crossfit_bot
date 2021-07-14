@@ -1,3 +1,4 @@
 from . import caruosel
 from . import menu
+from . import send_editable_message
 from . import echo
