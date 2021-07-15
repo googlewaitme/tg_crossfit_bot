@@ -2,6 +2,11 @@ from django.contrib import admin
 from content.models import *
 
 
+class TelegramAdmin(admin.ModelAdmin):
+    list_display = ['telegram_id', 'create_date']
+    ordering = ['telegram_id', 'create_date']
+
+
 class CategoryAdmin(admin.ModelAdmin):
     def show_description(self, obj):
         return obj.description[:30]
@@ -32,6 +37,7 @@ class PublicationAdmin(admin.ModelAdmin):
     ]
 
 
+admin.site.register(TelegramUser, TelegramAdmin)
 admin.site.register(Exercise, PublicationAdmin)
 admin.site.register(Product, PublicationAdmin)
 admin.site.register(ProductCategory, CategoryAdmin)
