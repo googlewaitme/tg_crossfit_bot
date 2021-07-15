@@ -18,5 +18,4 @@ class Command(BaseCommand):
                 loop.run_until_complete(send_dictribution(dictributions[0]))
                 dictributions[0].is_sended = True
                 dictributions[0].save()
-            else:
-                time.sleep(300)
+            time.sleep(300)
