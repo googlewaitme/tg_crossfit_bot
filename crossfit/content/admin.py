@@ -20,15 +20,15 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_view', 'show_description', 'create_date']
     ordering = ['name', 'is_view', 'create_date']
     actions = [make_visible, make_unvisible]
-    make_visible.short_description = 'Отключить отображение выбранных элементов'
-    make_unvisible.short_description = 'Включить отображение выбранных элементов'
+    make_unvisible.short_description = 'Отключить отображение выбранных элементов'
+    make_visible.short_description = 'Включить отображение выбранных элементов'
 
 
 class PublicationAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'create_date']
     ordering = ['name', 'category', 'create_date']
     fieldsets = [
-        ('Information', {
+        ('Информация', {
             'fields': ('name', 'category')
         }),
         ('Добавить фото или видео <a href=""> </a>', {
@@ -37,6 +37,20 @@ class PublicationAdmin(admin.ModelAdmin):
     ]
 
 
+class PopularQuestionAdmin(admin.ModelAdmin):
+    def show_answer(self, obj):
+        return obj.text[:40]
+
+    list_display = ['name', 'show_answer']
+    ordering = ['name', 'text']
+    fieldsets = [
+        ('', {
+            'fields': ('name', 'text')
+        })
+    ]
+
+
+admin.site.register(PopularQuestion, PopularQuestionAdmin)
 admin.site.register(TelegramUser, TelegramAdmin)
 admin.site.register(Exercise, PublicationAdmin)
 admin.site.register(Product, PublicationAdmin)

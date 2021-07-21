@@ -15,4 +15,7 @@ def get():
         InlineKeyboardButton('Поддержка проекта', callback_data='MESSAGE_SUPPORT'),
         InlineKeyboardButton('О нас', callback_data='MESSAGE_ABOUT_US')
     )
+    markup.row(
+        InlineKeyboardButton('Частые вопросы', callback_data='FAQ_element_0')
+    )
     return markup

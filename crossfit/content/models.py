@@ -54,6 +54,15 @@ class Publication(models.Model):
         abstract = True
 
 
+class PopularQuestion(Publication):
+    class Meta:
+        verbose_name = 'Популярный вопрос'
+        verbose_name_plural = 'Частые вопросы'
+
+    def __str__(self):
+        return self.name
+
+
 class Product(Publication):
     category = models.ForeignKey(
         ProductCategory, on_delete=models.PROTECT,

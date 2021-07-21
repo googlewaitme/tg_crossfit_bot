@@ -1,6 +1,6 @@
 from ..loader import dp
 from aiogram import types
-from ..keyboards.inline import generic, menu_markup
+from ..keyboards.inline import generic
 from ..utils.filters import starts_with
 from ..utils.helpers import get_chapter_model, get_publication_model
 from content.models import Product
