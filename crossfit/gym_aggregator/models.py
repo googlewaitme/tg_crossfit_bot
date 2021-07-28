@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 class City(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя города')
-    is_hidden = models.BooleanField(
+    is_view = models.BooleanField(
         default=False, verbose_name='Отображение')
 
     def __str__(self):
@@ -19,7 +19,7 @@ class Location(models.Model):
     name = models.CharField(
         max_length=100, verbose_name='Обозначение локации')
     city = models.ForeignKey(
-        City, verbose_name='Город', on_delete=models.CASCADE)
+        City, verbose_name='Город', on_delete=models.CASCADE, related_name='locations')
 
     def __str__(self):
         return self.name
@@ -52,9 +52,15 @@ class GymProfile(models.Model):
         Location,
         verbose_name='Локации'
     )
+    conclusion = models.TextField(max_length=400, verbose_name='Заключение')
 
     def __str__(self):
         return self.name
+
+    def get_raiting(self):
+        fields = [getattr(self.raiting, el.name, None) for el in self.raiting._meta.get_fields()]
+        int_fields = [field for field in fields if type(field) == int]
+        return sum(int_fields)
 
     class Meta:
         verbose_name = 'Спортзал'
@@ -66,6 +72,7 @@ class Raiting(models.Model):
         GymProfile,
         on_delete=models.CASCADE,
         primary_key=True,
+        related_name='raiting'
     )
     location = grade_field('Местоположение')
     square = grade_field('Площадь зала')
@@ -80,3 +87,12 @@ class Raiting(models.Model):
     class Meta:
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинги'
+
+
+class Visit(models.Model):
+    gym = models.ForeignKey(GymProfile, on_delete=models.CASCADE)
+    user = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name = 'Посещение'
+        verbose_name_plural = 'Посещения'

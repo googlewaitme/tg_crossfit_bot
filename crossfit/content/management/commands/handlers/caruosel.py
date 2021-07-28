@@ -4,6 +4,7 @@ from ..keyboards.inline import generic
 from ..utils.filters import starts_with
 from ..utils.helpers import get_chapter_model, get_publication_model
 from content.models import Product
+from ..utils.helpers import get_message_one_button
 
 
 @dp.callback_query_handler(starts_with('EMPTY_CALLBACK'))
@@ -27,7 +28,7 @@ async def send_chapter_list(callback_query: types.CallbackQuery):
     ]
     list_button_names.append(('Меню', 'menu'))
     markup = generic.list_inline_buttons(list_button_names)
-    text = 'Список категорий'
+    text = get_message_one_button('СПИСОК РАЗДЕЛОВ')
     await callback_query.message.edit_text(
         text=text, reply_markup=markup)
 
@@ -44,7 +45,7 @@ async def send_carousel_element_product(callback_query: types.CallbackQuery):
         text = make_post(product)
         markup = make_keyboard(data)
     else:
-        text = 'Пока что не одной публикации'  # TODO
+        text = get_message_one_button("Пока не одной публикации")
         markup = generic.inline_button(
             'Назад', f'categories_list_{data[1]}')
     await callback_query.message.edit_text(

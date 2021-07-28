@@ -3,6 +3,7 @@ from ..loader import dp
 from aiogram import types
 from ..utils.filters import starts_with
 from ..keyboards.inline import generic
+from ..utils.helpers import get_message_one_button
 
 
 @dp.callback_query_handler(starts_with('FAQ_element'))
@@ -12,7 +13,7 @@ async def send_faq_carousel(callback_query: types.CallbackQuery):
     list_elements = list(PopularQuestion.objects.all())
     count_elements = len(list_elements)
     if count_elements == 0:
-        text = 'Пока нет ни одного вопроса!'
+        text = get_message_one_button('FAQ нет ни одного вопроса')
         markup = generic.inline_button('Назад', 'menu')
     else:
         element_id = int(data[2])

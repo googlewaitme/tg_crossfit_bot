@@ -1,4 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from django.core.paginator import Page
 
 
 def list_inline_buttons(list_buttons):
@@ -38,8 +39,33 @@ def inline_carousel(object_id, count_objects,
     return markup
 
 
-def inline_button(text, callback_data):
-    markup = InlineKeyboardMarkup()
+def get_empty_markup(**kwargs):
+    return InlineKeyboardMarkup(**kwargs)
+
+
+def inline_button(text, callback_data, markup=None):
+    if not markup:
+        markup = InlineKeyboardMarkup()
     button = InlineKeyboardButton(text, callback_data=callback_data)
     markup.add(button)
+    return markup
+
+
+def inline_carousel_by_paginator(
+        markup: InlineKeyboardMarkup, page: Page,
+        callback_prefix: str, callback_back_button: str):
+    buttons = []
+    if page.has_previous():
+        callback_prev = callback_prefix + str(page.previous_page_number())
+        button_prev = InlineKeyboardButton('<-', callback_data=callback_prev)
+        buttons.append(button_prev)
+    button_page = InlineKeyboardButton(str(page.number), callback_data='EMPTY_CALLBACK')
+    buttons.append(button_page)
+    if page.has_next():
+        callback_next = callback_prefix + str(page.next_page_number())
+        button_next = InlineKeyboardButton('->', callback_data=callback_next)
+        buttons.append(button_next)
+    markup.row(*buttons)
+    back_button = InlineKeyboardButton('Назад', callback_data=callback_back_button)
+    markup.add(back_button)
     return markup
