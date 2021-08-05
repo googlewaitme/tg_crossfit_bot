@@ -46,7 +46,7 @@ def grade_field(verbose_name, default=0):
 
 class GymProfile(models.Model):
     name = models.CharField(max_length=300, verbose_name='Название')
-    address = models.CharField(max_length=300, verbose_name='Адресс')
+    address = models.CharField(max_length=300, verbose_name='Адрес')
     general_comment = models.TextField(verbose_name='Общий комментарий')
     locations = models.ManyToManyField(
         Location,
