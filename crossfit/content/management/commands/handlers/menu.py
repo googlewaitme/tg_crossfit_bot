@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher import FSMContext
 from content.models import TelegramUser
 from ..utils.helpers import get_message_one_button
+from aiogram.utils.exceptions import MessageNotModified
 
 
 @dp.message_handler(Command('menu'), state='*')
@@ -25,3 +26,8 @@ async def send_menu_by_callback(callback_query: types.CallbackQuery, state: FSMC
     text = get_message_one_button('MENU_MESSAGE')
     await callback_query.message.edit_text(
         text, reply_markup=menu_markup.get())
+
+
+@dp.errors_handler(exception=MessageNotModified)  # for skipping this exception
+async def message_not_modified_handler(update, error):
+    return True
