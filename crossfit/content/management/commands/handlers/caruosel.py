@@ -3,7 +3,6 @@ from aiogram import types
 from ..keyboards.inline import generic
 from ..utils.filters import starts_with
 from ..utils.helpers import get_chapter_model, get_publication_model
-from content.models import Product
 from ..utils.helpers import get_message_one_button
 
 
@@ -55,7 +54,8 @@ async def send_carousel_element_product(callback_query: types.CallbackQuery):
 def make_keyboard(data):
     category_id, element_id = data[2], int(data[3])
     back_button_callback = f'categories_list_{data[1]}'
-    query = Product.objects.filter(category=category_id)
+    publication = get_publication_model(data[1])
+    query = publication.objects.filter(category=category_id)
     count_objects = len(list(query))
     callback_prefix = '_'.join(data[:3])
     markup = generic.inline_carousel(
