@@ -13,7 +13,6 @@ from fuzzywuzzy import process
 @dp.callback_query_handler(starts_with('gym_list_city'))
 async def send_list_cities(callback_query: types.CallbackQuery):
     # gym_list_city
-    # TODO для количества городов больше 10
     buttons = list()
     for city in City.objects.filter(is_view=True):
         buttons.append((city.name, f'gym_locations_city_{city.pk}'))
@@ -30,7 +29,7 @@ async def search_locations(callback_query: types.CallbackQuery, state: FSMContex
     city_id = callback_query.data.split('_')[3]
     await SearchPlaceState.SEARCHING.set()
     await callback_query.message.edit_text(
-        text='Отправьте сообщением название метро/района, где вам удобно заниматься',
+        text=get_message_one_button('Запишите название метро/локацию'),
         reply_markup=generic.inline_button('Меню', 'menu')
     )
     await state.update_data(
