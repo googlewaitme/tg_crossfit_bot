@@ -1,5 +1,6 @@
 from ..loader import dp
 from aiogram import types
+from django.db.models import Count
 from ..utils.filters import starts_with
 from ..keyboards.inline import generic
 from gym_aggregator.models import City, GymProfile, Visit
@@ -10,7 +11,7 @@ from aiogram.dispatcher import FSMContext
 from fuzzywuzzy import process
 
 
-@dp.callback_query_handler(starts_with('gym_list_city'))
+@dp.callback_query_handler(starts_with('gym_list_city'), state='*')
 async def send_list_cities(callback_query: types.CallbackQuery):
     # gym_list_city
     buttons = list()
@@ -48,13 +49,15 @@ async def searching(message: types.Message, state: FSMContext):
     message_id = data['message_id']
     city_id = data['city_id']
     city = City.objects.get(pk=city_id)
-    locations = city.locations.all()
+    locations = city.locations.annotate(num_gyms=Count('gyms')).filter(num_gyms__gt=0)
     query = process.extract(message.text, locations)
     first_page = 1
-    buttons = [
-        (location[0].name, f'gym_{city.pk}_{location[0].pk}_{first_page}') for location in query
-    ]
-    buttons.append(('Меню', 'menu'))
+    buttons = []
+    for location, procent in query:
+        name = f'{location.name} {location.num_gyms} залов'
+        callback = f'gym_{city.pk}_{location.pk}_{first_page}'
+        buttons.append((name, callback))
+    buttons.append(('Назад', 'gym_list_city'))
     await dp.bot.edit_message_text(
         chat_id=message.chat.id,
         message_id=message_id,
