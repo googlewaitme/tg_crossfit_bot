@@ -11,6 +11,7 @@ class City(models.Model):
         return self.name
 
     class Meta:
+        ordering = ('name',)
         verbose_name = 'Город'
         verbose_name_plural = 'Города'
 
@@ -22,11 +23,13 @@ class Location(models.Model):
         City, verbose_name='Город', on_delete=models.CASCADE, related_name='locations')
 
     def __str__(self):
-        return self.name
+        return self.name + ' ' + self.city.name
 
     class Meta:
         verbose_name = 'Локация'
         verbose_name_plural = 'Локации'
+        ordering = ('city', 'name')
+        # search_fields = ('city', 'name')
 
 
 def validate_grade(value):
@@ -50,7 +53,8 @@ class GymProfile(models.Model):
     general_comment = models.TextField(verbose_name='Общий комментарий')
     locations = models.ManyToManyField(
         Location,
-        verbose_name='Локации'
+        verbose_name='Локации',
+        related_name='gyms'
     )
     conclusion = models.TextField(max_length=400, verbose_name='Заключение')
 

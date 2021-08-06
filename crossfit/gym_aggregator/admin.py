@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import *
 
 
@@ -8,6 +6,7 @@ class GymProfileInline(admin.TabularInline):
     model = GymProfile.locations.through
     model._meta.verbose_name_plural = "Локации"
     model._meta.verbose_name = 'Локация'
+    sortable_field_name = 'city'
     extra = 1
 
 
