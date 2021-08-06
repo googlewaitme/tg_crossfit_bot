@@ -12,8 +12,9 @@ from fuzzywuzzy import process
 
 
 @dp.callback_query_handler(starts_with('gym_list_city'), state='*')
-async def send_list_cities(callback_query: types.CallbackQuery):
+async def send_list_cities(callback_query: types.CallbackQuery, state: FSMContext):
     # gym_list_city
+    await state.reset_state()
     buttons = list()
     for city in City.objects.filter(is_view=True):
         buttons.append((city.name, f'gym_locations_city_{city.pk}'))
@@ -31,7 +32,7 @@ async def search_locations(callback_query: types.CallbackQuery, state: FSMContex
     await SearchPlaceState.SEARCHING.set()
     await callback_query.message.edit_text(
         text=get_message_one_button('Запишите название метро/локацию'),
-        reply_markup=generic.inline_button('Меню', 'menu')
+        reply_markup=generic.inline_button('Назад', 'gym_list_city')
     )
     await state.update_data(
         message_id=callback_query.message.message_id,
